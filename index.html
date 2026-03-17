@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joel Pineda — Systems Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* =============================================
+   DESIGN TOKENS
+============================================= */
+:root {
+  --bg: #060810;
+  --bg2: #0d1117;
+  --bg3: #141922;
+  --card: #111827;
+  --card2: #1a2235;
+  --border: rgba(99,102,241,0.18);
+  --border2: rgba(255,255,255,0.07);
+  --text: #f0f4ff;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --blue: #6366f1;
+  --cyan: #06b6d4;
+  --green: #10d9a0;
+  --purple: #a855f7;
+  --orange: #f97316;
+  --grad1: linear-gradient(135deg, #6366f1, #a855f7);
+  --grad2: linear-gradient(135deg, #06b6d4, #6366f1);
+  --grad3: linear-gradient(135deg, #10d9a0, #06b6d4);
+  --glow: 0 0 40px rgba(99,102,241,0.25);
+  --glow2: 0 0 60px rgba(168,85,247,0.2);
+  --shadow: 0 4px 30px rgba(0,0,0,0.5);
+  --radius: 16px;
+  --radius2: 12px;
+  --nav-h: 72px;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --bg2: #ffffff;
+  --bg3: #f8faff;
+  --card: #ffffff;
+  --card2: #eef2ff;
+  --border: rgba(99,102,241,0.2);
+  --border2: rgba(0,0,0,0.06);
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #94a3b8;
+  --glow: 0 0 40px rgba(99,102,241,0.15);
+  --glow2: 0 0 60px rgba(168,85,247,0.1);
+  --shadow: 0 4px 30px rgba(0,0,0,0.08);
+}
+
+/* =============================================
+   RESET & BASE
+============================================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  transition:background var(--transition),color var(--transition);
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+ul{list-style:none}
+
+/* =============================================
+   SCROLLBAR
+============================================= */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+
+/* =============================================
+   ANIMATED BACKGROUND
+============================================= */
+.orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbFloat linear infinite}
+.orb1{width:600px;height:600px;background:rgba(99,102,241,0.12);top:-200px;left:-200px;animation-duration:40s}
+.orb2{width:500px;height:500px;background:rgba(168,85,247,0.1);bottom:-150px;right:-150px;animation-duration:55s;animation-direction:reverse}
+.orb3{width:400px;height:400px;background:rgba(6,182,212,0.08);top:40%;right:10%;animation-duration:35s;animation-delay:-10s}
+@keyframes orbFloat{
+  0%{transform:translate(0,0) rotate(0deg)}
+  33%{transform:translate(60px,-40px) rotate(120deg)}
+  66%{transform:translate(-40px,60px) rotate(240deg)}
+  100%{transform:translate(0,0) rotate(360deg)}
+}
+[data-theme="light"] .orb1{background:rgba(99,102,241,0.07)}
+[data-theme="light"] .orb2{background:rgba(168,85,247,0.06)}
+[data-theme="light"] .orb3{background:rgba(6,182,212,0.05)}
+
+/* Grid overlay */
+.grid-overlay{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(99,102,241,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 80%);
+}
+
+/* =============================================
+   NAV
+============================================= */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:var(--nav-h);
+  display:flex;align-items:center;
+  padding:0 2rem;
+  background:rgba(6,8,16,0.8);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transition:all var(--transition);
+}
+[data-theme="light"] nav{background:rgba(240,244,255,0.85)}
+
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1280px;margin:0 auto;width:100%;
+}
+.logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-0.5px;
+}
+.nav-links{display:flex;gap:0.25rem;align-items:center}
+.nav-links a{
+  padding:0.45rem 0.85rem;border-radius:8px;
+  font-size:0.88rem;font-weight:500;color:var(--text2);
+  transition:all 0.2s;position:relative;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--border)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--blue);
+}
+
+.nav-controls{display:flex;align-items:center;gap:0.5rem}
+.ctrl-btn{
+  width:38px;height:38px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card);color:var(--text2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;transition:all 0.2s;
+}
+.ctrl-btn:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 0 15px rgba(99,102,241,0.2)}
+
+.lang-btn{
+  font-family:'DM Mono',monospace;font-size:0.75rem;font-weight:500;
+  letter-spacing:0.05em;padding:0 0.75rem;width:auto;
+}
+.hamburger{display:none;flex-direction:column;gap:5px;width:38px;height:38px;justify-content:center;align-items:center;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer}
+.hamburger span{width:18px;height:2px;background:var(--text2);border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile nav */
+.mobile-nav{
+  display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:1.5rem 2rem;flex-direction:column;gap:0.5rem;
+}
+.mobile-nav.open{display:flex}
+.mobile-nav a{padding:0.75rem 1rem;border-radius:10px;color:var(--text2);font-weight:500;transition:all 0.2s}
+.mobile-nav a:hover{background:var(--card);color:var(--text)}
+
+/* =============================================
+   SECTIONS
+============================================= */
+main{padding-top:var(--nav-h)}
+section{
+  padding:6rem 2rem;
+  max-width:1280px;margin:0 auto;
+}
+.sec-label{
+  font-family:'DM Mono',monospace;font-size:0.75rem;font-weight:500;
+  color:var(--blue);letter-spacing:0.15em;text-transform:uppercase;
+  margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;
+}
+.sec-label::before{content:'';width:24px;height:1px;background:var(--blue)}
+.sec-title{
+  font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:800;line-height:1.1;margin-bottom:1rem;
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.sec-sub{color:var(--text2);font-size:1.05rem;max-width:560px;margin-bottom:3rem;line-height:1.7}
+
+/* =============================================
+   HERO
+============================================= */
+#home{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:calc(var(--nav-h) + 2rem);
+  position:relative;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr auto;gap:5rem;
+  align-items:center;width:100%;max-width:1280px;margin:0 auto;
+}
+.hero-eyebrow{
+  font-family:'DM Mono',monospace;font-size:0.8rem;
+  color:var(--green);letter-spacing:0.12em;
+  margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;
+}
+.hero-eyebrow::before{
+  content:'';display:block;width:2px;height:20px;background:var(--green);border-radius:2px;
+  animation:pulse-bar 2s ease infinite;
+}
+@keyframes pulse-bar{0%,100%{height:20px;opacity:1}50%{height:12px;opacity:0.6}}
+
+.hero-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.8rem,6vw,5rem);line-height:1.0;
+  letter-spacing:-2px;margin-bottom:0.5rem;
+}
+.hero-name .accent{
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-title{
+  font-family:'DM Mono',monospace;font-size:clamp(0.9rem,2vw,1.1rem);
+  color:var(--cyan);margin-bottom:1.5rem;font-weight:500;
+}
+.hero-desc{color:var(--text2);font-size:1.05rem;max-width:500px;line-height:1.75;margin-bottom:2.5rem}
+.status-pill{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.4rem 1rem;border-radius:100px;
+  border:1px solid rgba(16,217,160,0.3);background:rgba(16,217,160,0.08);
+  font-size:0.8rem;color:var(--green);font-weight:600;
+  margin-bottom:2rem;
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  padding:0.85rem 1.75rem;border-radius:12px;
+  background:var(--grad1);color:#fff;font-weight:600;font-size:0.95rem;
+  box-shadow:0 4px 20px rgba(99,102,241,0.35);
+  transition:all 0.25s;position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  opacity:0;transition:opacity 0.25s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.45)}
+.btn-primary:hover::before{opacity:1}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  padding:0.85rem 1.75rem;border-radius:12px;
+  border:1px solid var(--border);color:var(--text2);font-weight:600;font-size:0.95rem;
+  background:var(--card);transition:all 0.25s;
+}
+.btn-ghost:hover{border-color:var(--blue);color:var(--text);transform:translateY(-2px)}
+
+/* Stats row */
+.hero-stats{
+  display:flex;gap:2.5rem;margin-top:3rem;padding-top:2rem;
+  border-top:1px solid var(--border2);
+}
+.stat-item{display:flex;flex-direction:column}
+.stat-num{
+  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+.stat-label{font-size:0.78rem;color:var(--text3);font-weight:500;margin-top:0.25rem}
+
+/* Profile card */
+.profile-card{
+  width:320px;flex-shrink:0;position:relative;
+}
+.profile-frame{
+  width:280px;height:340px;border-radius:24px;overflow:hidden;
+  background:var(--grad1);padding:3px;
+  box-shadow:var(--glow),var(--shadow);
+  position:relative;
+  animation:floatCard 6s ease-in-out infinite;
+}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.profile-frame-inner{
+  width:100%;height:100%;border-radius:22px;overflow:hidden;
+  background:var(--card);display:flex;align-items:center;justify-content:center;
+  font-size:5rem;color:var(--blue);position:relative;
+}
+.profile-frame-inner img{width:100%;height:100%;object-fit:cover}
+
+/* Floating badges */
+.badge-float{
+  position:absolute;display:flex;align-items:center;gap:0.5rem;
+  background:var(--card2);border:1px solid var(--border);border-radius:12px;
+  padding:0.6rem 1rem;font-size:0.8rem;font-weight:600;
+  box-shadow:var(--shadow);backdrop-filter:blur(10px);
+  white-space:nowrap;
+}
+.badge-float.b1{bottom:-15px;left:-40px;color:var(--cyan)}
+.badge-float.b2{top:-15px;right:-40px;color:var(--green)}
+.badge-float.b3{top:-15px;right:-40px;color:var(--blue)}
+.badge-float i{font-size:1rem}
+
+/* =============================================
+   EXPERIENCE SECTION
+============================================= */
+#experience{padding:6rem 2rem}
+.exp-wrapper{max-width:1280px;margin:0 auto}
+
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:linear-gradient(to bottom,var(--blue),var(--purple),var(--cyan));
+  border-radius:2px;
+}
+.tl-item{
+  position:relative;padding:0 0 3rem 2.5rem;
+  animation:fadeSlide 0.6s ease both;
+}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{
+  position:absolute;left:-2.4rem;top:0.4rem;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--grad1);border:3px solid var(--bg);
+  box-shadow:0 0 0 3px var(--blue);
+}
+.tl-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem;transition:all var(--transition);
+}
+.tl-card:hover{border-color:var(--blue);box-shadow:var(--glow);transform:translateX(4px)}
+.tl-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem}
+.tl-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text)}
+.tl-company{color:var(--blue);font-size:0.95rem;font-weight:600;margin-top:0.2rem}
+.tl-date{
+  font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--text3);
+  background:var(--bg3);border:1px solid var(--border2);
+  padding:0.3rem 0.75rem;border-radius:100px;white-space:nowrap;
+}
+.tl-type{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-size:0.75rem;font-weight:600;padding:0.25rem 0.65rem;border-radius:100px;
+  margin-bottom:0.75rem;
+}
+.type-full{background:rgba(16,217,160,0.1);color:var(--green);border:1px solid rgba(16,217,160,0.2)}
+.type-freelance{background:rgba(6,182,212,0.1);color:var(--cyan);border:1px solid rgba(6,182,212,0.2)}
+.type-intern{background:rgba(168,85,247,0.1);color:var(--purple);border:1px solid rgba(168,85,247,0.2)}
+.tl-desc{color:var(--text2);font-size:0.95rem;line-height:1.7;margin-bottom:1rem}
+.tl-tags{display:flex;flex-wrap:wrap;gap:0.5rem}
+.tl-tag{
+  font-size:0.75rem;padding:0.3rem 0.7rem;border-radius:6px;
+  background:rgba(99,102,241,0.08);color:var(--blue);border:1px solid rgba(99,102,241,0.15);
+  font-weight:500;
+}
+
+/* =============================================
+   ABOUT / CONOCEME
+============================================= */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:start}
+.about-bio{color:var(--text2);font-size:1.05rem;line-height:1.8;margin-bottom:2rem}
+.about-bio strong{color:var(--text);font-weight:600}
+
+.info-chips{display:flex;flex-direction:column;gap:0.75rem}
+.info-chip{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;
+  background:var(--card);border:1px solid var(--border2);border-radius:var(--radius2);
+  transition:all 0.2s;
+}
+.info-chip:hover{border-color:var(--border);transform:translateX(4px)}
+.chip-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--grad1);display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:0.9rem;flex-shrink:0;
+}
+.chip-label{font-size:0.77rem;color:var(--text3);font-weight:500;margin-bottom:0.1rem;font-family:'DM Mono',monospace}
+.chip-value{font-size:0.95rem;font-weight:600;color:var(--text)}
+.chip-value a{color:var(--blue);transition:color 0.2s}
+.chip-value a:hover{color:var(--cyan)}
+
+.values-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1.5rem}
+.value-card{
+  padding:1.5rem;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);
+  text-align:center;transition:all 0.25s;position:relative;overflow:hidden;
+}
+.value-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--grad1);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;
+}
+.value-card:hover::before{transform:scaleX(1)}
+.value-card:hover{transform:translateY(-4px);box-shadow:var(--glow)}
+.value-icon{font-size:1.5rem;margin-bottom:0.75rem}
+.value-name{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.3rem}
+.value-desc{font-size:0.8rem;color:var(--text3);line-height:1.5}
+
+/* =============================================
+   SKILLS CAROUSEL
+============================================= */
+#skills{overflow:hidden}
+.skills-section{max-width:1280px;margin:0 auto;padding:0 2rem}
+.skills-cats{display:flex;gap:0.5rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.skill-cat-btn{
+  padding:0.5rem 1.2rem;border-radius:100px;
+  font-size:0.85rem;font-weight:600;color:var(--text2);
+  border:1px solid var(--border);background:var(--card);transition:all 0.2s;
+}
+.skill-cat-btn.active,.skill-cat-btn:hover{
+  background:var(--blue);color:#fff;border-color:var(--blue);
+  box-shadow:0 4px 15px rgba(99,102,241,0.35);
+}
+
+.carousel-wrap{position:relative;overflow:hidden}
+.carousel-track{
+  display:flex;gap:1.25rem;
+  transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  padding:0.5rem 0.25rem;
+}
+.skill-slide{
+  min-width:220px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.75rem 1.5rem;
+  transition:all 0.3s;position:relative;overflow:hidden;flex-shrink:0;
+}
+.skill-slide:hover{transform:translateY(-6px);border-color:var(--blue);box-shadow:var(--glow)}
+.skill-slide::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--grad1);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;
+}
+.skill-slide:hover::after{transform:scaleX(1)}
+.slide-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;color:var(--blue);margin-bottom:1rem;
+  transition:all 0.3s;
+}
+.skill-slide:hover .slide-icon{background:rgba(99,102,241,0.2);transform:scale(1.05)}
+.slide-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.3rem}
+.slide-level{font-size:0.78rem;color:var(--text3);margin-bottom:1rem;font-family:'DM Mono',monospace}
+.prog-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--grad1);border-radius:2px;width:0;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+
+.carousel-nav{display:flex;gap:0.75rem;margin-top:1.5rem;justify-content:center}
+.c-nav-btn{
+  width:40px;height:40px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card);color:var(--text2);display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.c-nav-btn:hover{border-color:var(--blue);color:var(--blue)}
+.c-dots{display:flex;gap:0.5rem;align-items:center}
+.c-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all 0.2s;cursor:pointer}
+.c-dot.active{width:18px;border-radius:3px;background:var(--blue)}
+
+/* Soft skills row */
+.soft-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;
+}
+.soft-card{
+  padding:1.5rem;background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);text-align:center;transition:all 0.25s;
+}
+.soft-card:hover{border-color:var(--blue);transform:translateY(-4px)}
+.soft-icon{font-size:1.75rem;margin-bottom:0.75rem}
+.soft-name{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.25rem}
+.soft-tag{font-size:0.75rem;color:var(--blue);font-weight:600;font-family:'DM Mono',monospace}
+
+/* =============================================
+   EDUCATION & CERTS
+============================================= */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.edu-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem;border-left:4px solid var(--blue);transition:all var(--transition);
+  position:relative;overflow:hidden;
+}
+.edu-card::after{
+  content:'';position:absolute;top:0;right:0;bottom:0;
+  width:4px;background:var(--grad1);transform:scaleY(0);transition:transform 0.3s;transform-origin:top;
+}
+.edu-card:hover{box-shadow:var(--glow);transform:translateY(-3px)}
+.edu-card:hover::after{transform:scaleY(1)}
+.edu-year{
+  font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--cyan);
+  background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);
+  padding:0.25rem 0.6rem;border-radius:6px;display:inline-block;margin-bottom:0.75rem;
+}
+.edu-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:0.5rem}
+.edu-inst{font-size:0.88rem;color:var(--text2)}
+.edu-btn{
+  display:inline-flex;align-items:center;gap:0.4rem;margin-top:1rem;
+  padding:0.4rem 0.9rem;border-radius:8px;font-size:0.8rem;font-weight:600;
+  background:var(--bg3);border:1px solid var(--border);color:var(--text2);transition:all 0.2s;
+}
+.edu-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+.certs-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;
+}
+.cert-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);
+  padding:1.25rem;display:flex;align-items:center;gap:1rem;transition:all 0.25s;
+}
+.cert-card:hover{border-color:var(--purple);transform:translateX(4px)}
+.cert-icon{
+  width:40px;height:40px;border-radius:10px;background:rgba(168,85,247,0.12);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--purple);flex-shrink:0;
+}
+.cert-name{font-size:0.9rem;font-weight:600;margin-bottom:0.25rem}
+.cert-issuer{font-size:0.78rem;color:var(--text3)}
+.cert-btn{
+  margin-left:auto;width:32px;height:32px;border-radius:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);font-size:0.8rem;transition:all 0.2s;flex-shrink:0;
+}
+.cert-btn:hover{border-color:var(--purple);color:var(--purple)}
+
+/* =============================================
+   PROJECTS
+============================================= */
+.proj-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;
+}
+.proj-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2rem;transition:all var(--transition);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--grad2);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;
+}
+.proj-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.3),var(--glow)}
+.proj-card:hover::before{transform:scaleX(1)}
+.proj-card:hover .proj-arrow{transform:translate(3px,-3px);opacity:1}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.proj-icon{
+  width:46px;height:46px;border-radius:12px;background:rgba(6,182,212,0.1);
+  border:1px solid rgba(6,182,212,0.2);display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--cyan);
+}
+.proj-arrow{color:var(--text3);opacity:0.4;transition:all 0.3s;font-size:0.9rem}
+.proj-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:0.75rem}
+.proj-desc{color:var(--text2);font-size:0.9rem;line-height:1.65;margin-bottom:1.25rem;flex:1}
+.proj-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem}
+.proj-tag{
+  font-size:0.72rem;padding:0.25rem 0.6rem;border-radius:5px;
+  background:rgba(6,182,212,0.07);color:var(--cyan);border:1px solid rgba(6,182,212,0.15);
+  font-weight:600;font-family:'DM Mono',monospace;
+}
+.proj-links{display:flex;gap:0.75rem;margin-top:auto}
+.plink{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  padding:0.6rem 1.1rem;border-radius:9px;font-size:0.83rem;font-weight:600;
+  border:1px solid var(--border);background:var(--bg3);color:var(--text2);transition:all 0.2s;
+}
+.plink:hover{border-color:var(--blue);color:var(--blue)}
+.plink.plink-demo{background:var(--grad3);color:#fff;border:none}
+.plink.plink-demo:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,217,160,0.3)}
+
+/* =============================================
+   CONTACT
+============================================= */
+.contact-wrapper{
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:4rem;position:relative;overflow:hidden;
+}
+.contact-wrapper::before{
+  content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;
+  border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.12),transparent 70%);
+  pointer-events:none;
+}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.contact-info-col{display:flex;flex-direction:column;gap:1rem}
+.contact-item{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius2);transition:all 0.2s;
+}
+.contact-item:hover{border-color:var(--blue);transform:translateX(4px)}
+.c-icon{
+  width:38px;height:38px;border-radius:10px;background:var(--grad1);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;flex-shrink:0;
+}
+.c-label{font-size:0.75rem;color:var(--text3);font-weight:500}
+.c-val{font-size:0.9rem;font-weight:600;color:var(--text)}
+.c-val a{color:var(--blue);transition:color 0.2s}
+.c-val a:hover{color:var(--cyan)}
+
+.social-row{display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap}
+.soc-btn{
+  display:flex;align-items:center;gap:0.5rem;padding:0.6rem 1.1rem;
+  border-radius:10px;border:1px solid var(--border);background:var(--bg3);
+  color:var(--text2);font-size:0.85rem;font-weight:600;transition:all 0.2s;
+}
+.soc-btn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
+
+/* Contact form */
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-label{font-size:0.8rem;font-weight:600;color:var(--text2);font-family:'DM Mono',monospace}
+.form-input,.form-textarea,.form-select{
+  background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  border-radius:10px;padding:0.85rem 1rem;font-size:0.9rem;font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;outline:none;width:100%;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text3)}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+.form-textarea{resize:vertical;min-height:120px}
+.form-select{appearance:none;cursor:pointer}
+.form-select option{background:var(--card)}
+
+/* =============================================
+   FOOTER
+============================================= */
+footer{
+  border-top:1px solid var(--border);padding:2.5rem 2rem;
+  text-align:center;color:var(--text3);font-size:0.85rem;
+}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-text{color:var(--text3);font-size:0.82rem}
+.footer-kodeva a{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  color:var(--cyan);font-weight:600;font-size:0.85rem;
+  padding:0.4rem 0.9rem;border-radius:8px;border:1px solid rgba(6,182,212,0.3);
+  background:rgba(6,182,212,0.05);transition:all 0.2s;
+}
+.footer-kodeva a:hover{background:rgba(6,182,212,0.12);transform:translateY(-2px)}
+
+/* =============================================
+   MODAL
+============================================= */
+.modal-overlay{
+  position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.92);
+  display:none;justify-content:center;align-items:center;padding:1.5rem;
+  backdrop-filter:blur(8px);
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--card2);border:1px solid var(--border);border-radius:20px;
+  width:100%;max-width:820px;height:85vh;display:flex;flex-direction:column;
+  overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.6);
+}
+.modal-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);
+}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
+.modal-close{width:34px;height:34px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.modal-close:hover{background:rgba(239,68,68,0.1);border-color:#ef4444;color:#ef4444}
+.modal-body{flex:1;overflow:hidden}
+.modal-body iframe{width:100%;height:100%;border:none}
+
+/* =============================================
+   SCROLL ANIMATIONS
+============================================= */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.delay-1{transition-delay:0.1s}
+.delay-2{transition-delay:0.2s}
+.delay-3{transition-delay:0.3s}
+.delay-4{transition-delay:0.4s}
+.delay-5{transition-delay:0.5s}
+
+/* =============================================
+   DIVIDER
+============================================= */
+.section-divider{
+  max-width:1280px;margin:0 auto 0;padding:0 2rem;
+}
+.section-divider hr{border:none;border-top:1px solid var(--border2)}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:3rem}
+  .profile-card{width:100%;display:flex;justify-content:center}
+  .profile-frame{width:240px;height:290px}
+  .badge-float.b1{left:0}
+  .badge-float.b2{right:0}
+  .hero-name{font-size:3rem}
+  .about-grid{grid-template-columns:1fr}
+  .edu-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .values-row{grid-template-columns:1fr 1fr}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  section{padding:4rem 1.25rem}
+  .proj-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .contact-wrapper{padding:2rem 1.5rem}
+  .hero-stats{gap:1rem}
+  .sec-title{font-size:2rem}
+  .values-row{grid-template-columns:1fr}
+  .timeline{padding-left:1rem}
+  .tl-dot{left:-1.5rem}
+}
+@media(max-width:480px){
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn-primary,.hero-btns .btn-ghost{width:100%;justify-content:center}
+  .carousel-track{gap:0.75rem}
+  .skill-slide{min-width:180px}
+}
+</style>
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#home" class="logo">JP<span style="color:var(--text2)">_</span></a>
+    <ul class="nav-links">
+      <li><a href="#home" class="active" data-nav="home"><span data-i18n="nav-home">Inicio</span></a></li>
+      <li><a href="#experience" data-nav="experience"><span data-i18n="nav-exp">Experiencia</span></a></li>
+      <li><a href="#conoceme" data-nav="conoceme"><span data-i18n="nav-about">Sobre mí</span></a></li>
+      <li><a href="#skills" data-nav="skills"><span data-i18n="nav-skills">Habilidades</span></a></li>
+      <li><a href="#education" data-nav="education"><span data-i18n="nav-edu">Formación</span></a></li>
+      <li><a href="#projects" data-nav="projects"><span data-i18n="nav-projects">Proyectos</span></a></li>
+      <li><a href="#contact" data-nav="contact"><span data-i18n="nav-contact">Contacto</span></a></li>
+      <li><a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank" style="color:var(--cyan)">KODEVA <i class="fas fa-external-link-alt" style="font-size:0.7em"></i></a></li>
+    </ul>
+    <div class="nav-controls">
+      <button class="ctrl-btn lang-btn" id="lang-btn" title="Toggle language">ES</button>
+      <button class="ctrl-btn" id="theme-btn" title="Toggle theme"><i class="fas fa-moon"></i></button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#home" data-i18n="nav-home">Inicio</a>
+  <a href="#experience" data-i18n="nav-exp">Experiencia</a>
+  <a href="#conoceme" data-i18n="nav-about">Sobre mí</a>
+  <a href="#skills" data-i18n="nav-skills">Habilidades</a>
+  <a href="#education" data-i18n="nav-edu">Formación</a>
+  <a href="#projects" data-i18n="nav-projects">Proyectos</a>
+  <a href="#contact" data-i18n="nav-contact">Contacto</a>
+</div>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<section id="home">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <div class="status-pill"><div class="status-dot"></div><span data-i18n="status">Disponible para trabajar</span></div>
+      <div class="hero-eyebrow" data-i18n="hero-eyebrow">Ing. Sistemas · Cúcuta, Colombia</div>
+      <h1 class="hero-name">
+        Joel <span class="accent">Pineda</span><br>Rincón
+      </h1>
+      <div class="hero-title"><span data-i18n="hero-title">Developer & Cybersecurity Specialist</span></div>
+      <p class="hero-desc" data-i18n="hero-desc">
+        Estudiante de Ingeniería de Sistemas con múltiples certificaciones en desarrollo de software y ciberseguridad. Construyendo soluciones tecnológicas de alto impacto.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary"><i class="fas fa-code"></i><span data-i18n="btn-projects">Ver Proyectos</span></a>
+        <a href="#contact" class="btn-ghost"><i class="fas fa-envelope"></i><span data-i18n="btn-contact">Contáctame</span></a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item reveal delay-1">
+          <span class="stat-num">5+</span>
+          <span class="stat-label" data-i18n="stat-proj">Proyectos</span>
+        </div>
+        <div class="stat-item reveal delay-2">
+          <span class="stat-num">4+</span>
+          <span class="stat-label" data-i18n="stat-certs">Certificaciones</span>
+        </div>
+        <div class="stat-item reveal delay-3">
+          <span class="stat-num">3+</span>
+          <span class="stat-label" data-i18n="stat-years">Años experiencia</span>
+        </div>
+        <div class="stat-item reveal delay-4">
+          <span class="stat-num">10°</span>
+          <span class="stat-label" data-i18n="stat-sem">Semestre</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-frame">
+        <div class="profile-frame-inner">
+          <img src="archivos/foto.jpg" alt="Joel Pineda" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=\'fas fa-user\' style=\'font-size:5rem;color:var(--blue)\'></i>'">
+        </div>
+      </div>
+      <div class="badge-float b1 reveal delay-2"><i class="fas fa-shield-alt" style="color:var(--cyan)"></i> Cybersecurity</div>
+      <div class="badge-float b2 reveal delay-3"><i class="fas fa-code" style="color:var(--green)"></i> Full Stack</div>
+            <div class="badge-float b3 reveal delay-4"><i class="fas fa-code" style="color:var(--green)"></i>Lider TI</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience">
+  <div class="exp-wrapper">
+    <div class="sec-label"><span data-i18n="exp-label">Trayectoria</span></div>
+    <h2 class="sec-title" data-i18n="exp-title">Experiencia</h2>
+    <p class="sec-sub" data-i18n="exp-sub">Proyectos reales, freelance y formación práctica que han moldeado mi perfil profesional.</p>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div>
+              <div class="tl-title" data-i18n="exp1-title">Desarrollador Web Full-Stack (Freelance)</div>
+              <div class="tl-company">SystemsPlay / Independiente</div>
+            </div>
+            <div class="tl-date">2022 — <span data-i18n="present">Presente</span></div>
+          </div>
+          <span class="tl-type type-freelance"><i class="fas fa-briefcase"></i> Freelance</span>
+          <p class="tl-desc" data-i18n="exp1-desc">Diseño y desarrollo de aplicaciones web completas para clientes como organizaciones religiosas, empresas comerciales y proyectos personales. Implementación de sistemas de gestión con Google Apps Script, dashboards ejecutivos y automatización de procesos.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">HTML5/CSS3</span>
+            <span class="tl-tag">JavaScript</span>
+            <span class="tl-tag">Google Apps Script</span>
+            <span class="tl-tag">Google Workspace</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal delay-1">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div>
+              <div class="tl-title" data-i18n="exp2-title">Analista de Ciberseguridad (Prácticas Académicas)</div>
+              <div class="tl-company">Universidad Simón Bolívar · Cúcuta</div>
+            </div>
+            <div class="tl-date">2023 — 2024</div>
+          </div>
+          <span class="tl-type type-intern"><i class="fas fa-graduation-cap"></i> <span data-i18n="intern">Académico</span></span>
+          <p class="tl-desc" data-i18n="exp2-desc">Análisis de vulnerabilidades en sistemas empresariales mediante herramientas especializadas (Nmap, Fortinet). Elaboración de reportes ejecutivos de seguridad y aplicación de metodologías de auditoría. Certificaciones obtenidas con Fortinet y Coursera en el proceso.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Nmap</span>
+            <span class="tl-tag">Fortinet</span>
+            <span class="tl-tag">Linux</span>
+            <span class="tl-tag">Python</span>
+            <span class="tl-tag">Bash</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal delay-2">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div>
+              <div class="tl-title" data-i18n="exp3-title">Administrador de Sistemas & Redes</div>
+              <div class="tl-company">Entorno Personal / Laboratorio</div>
+            </div>
+            <div class="tl-date">2021 — <span data-i18n="present">Presente</span></div>
+          </div>
+          <span class="tl-type type-full"><i class="fas fa-server"></i> <span data-i18n="selflearned">Autodidacta</span></span>
+          <p class="tl-desc" data-i18n="exp3-desc">Configuración y administración de redes TCP/IP, sistemas operativos Linux/Windows Server. Mantenimiento de hardware, diagnóstico de fallos y optimización del rendimiento de equipos. Aplicación de protocolos de seguridad y mejores prácticas.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">TCP/IP</span>
+            <span class="tl-tag">Linux</span>
+            <span class="tl-tag">Windows Server</span>
+            <span class="tl-tag">Redes</span>
+            <span class="tl-tag">Hardware</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== SOBRE MI ===================== -->
+<section id="conoceme">
+  <div class="sec-label"><span data-i18n="about-label">Personal</span></div>
+  <h2 class="sec-title" data-i18n="about-title">Sobre Mí</h2>
+  <div class="about-grid">
+    <div class="reveal-left">
+      <p class="about-bio" data-i18n="about-bio">
+        Soy <strong>Joel Steven Pineda Rincón</strong>, estudiante de <strong>Ingeniería de Sistemas</strong> en la Universidad Simón Bolívar (10° semestre), con una visión clara: crear tecnología que resuelva problemas reales. Me apasiona el mundo del desarrollo web, la ciberseguridad y la automatización de procesos. Soy proactivo, autodidacta y busco siempre superar las expectativas.
+      </p>
+      <div class="values-row">
+        <div class="value-card reveal delay-1">
+          <div class="value-icon">🤝</div>
+          <div class="value-name" data-i18n="val1">Integridad</div>
+          <div class="value-desc" data-i18n="val1-d">Honestidad y ética en cada proyecto</div>
+        </div>
+        <div class="value-card reveal delay-2">
+          <div class="value-icon">🚀</div>
+          <div class="value-name" data-i18n="val2">Innovación</div>
+          <div class="value-desc" data-i18n="val2-d">Soluciones de vanguardia</div>
+        </div>
+        <div class="value-card reveal delay-3">
+          <div class="value-icon">✅</div>
+          <div class="value-name" data-i18n="val3">Calidad</div>
+          <div class="value-desc" data-i18n="val3-d">Excelencia y entrega rigurosa</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-chips reveal-right">
+      <div class="info-chip delay-1">
+        <div class="chip-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div><div class="chip-label" data-i18n="ic-birth">Nacimiento</div><div class="chip-value">20 de Julio, 2003</div></div>
+      </div>
+      <div class="info-chip delay-2">
+        <div class="chip-icon" style="background:var(--grad3)"><i class="fas fa-map-marker-alt"></i></div>
+        <div><div class="chip-label" data-i18n="ic-loc">Ubicación</div><div class="chip-value">Cúcuta, Norte de Santander</div></div>
+      </div>
+      <div class="info-chip delay-3">
+        <div class="chip-icon" style="background:var(--grad2)"><i class="fas fa-university"></i></div>
+        <div><div class="chip-label" data-i18n="ic-uni">Universidad</div><div class="chip-value">Simón Bolívar · 10° Semestre</div></div>
+      </div>
+      <div class="info-chip delay-4">
+        <div class="chip-icon" style="background:linear-gradient(135deg,#10d9a0,#06b6d4)"><i class="fas fa-envelope"></i></div>
+        <div><div class="chip-label">Email</div><div class="chip-value"><a href="/cdn-cgi/l/email-protection#ec868389809c858289888d9e85828f8382dad8dcac8b818d8580c28f8381"><span class="__cf_email__" data-cfemail="e882878d849881868d8c899a81868b8786dedcd8a88f85898184c68b8785">[email&#160;protected]</span></a></div></div>
+      </div>
+      <div class="info-chip delay-5">
+        <div class="chip-icon" style="background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
+        <div><div class="chip-label" data-i18n="ic-contact">Contacto Directo</div><div class="chip-value"><a href="https://wa.me/573133118664" target="_blank">+57 313 311 8664</a></div></div>
+      </div>
+      <div class="info-chip">
+        <div class="chip-icon" style="background:linear-gradient(135deg,#f97316,#ef4444)"><i class="fas fa-microchip"></i></div>
+        <div><div class="chip-label" data-i18n="ic-interests">Intereses</div><div class="chip-value" data-i18n="ic-interests-v">AI, Hardware, Gaming, Deportes</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills">
+  <div class="skills-section">
+    <div class="sec-label"><span data-i18n="skills-label">Tech Stack</span></div>
+    <h2 class="sec-title" data-i18n="skills-title">Habilidades Técnicas</h2>
+    <p class="sec-sub" data-i18n="skills-sub">Tecnologías que manejo con confianza para construir soluciones robustas y seguras.</p>
+
+    <div class="skills-cats">
+      <button class="skill-cat-btn active" data-cat="all" data-i18n="cat-all">Todas</button>
+      <button class="skill-cat-btn" data-cat="dev" data-i18n="cat-dev">Desarrollo</button>
+      <button class="skill-cat-btn" data-cat="sec" data-i18n="cat-sec">Seguridad</button>
+      <button class="skill-cat-btn" data-cat="ops" data-i18n="cat-ops">Sistemas</button>
+      <button class="skill-cat-btn" data-cat="biz" data-i18n="cat-biz">Negocios</button>
+    </div>
+
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carousel-track">
+        <!-- DEV -->
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon"><i class="fab fa-html5"></i></div>
+          <div class="slide-name">HTML5 / CSS3</div>
+          <div class="slide-level" data-i18n="lv-exp">Experto</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="92"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon"><i class="fab fa-js-square"></i></div>
+          <div class="slide-name">JavaScript</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="82"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon"><i class="fab fa-python"></i></div>
+          <div class="slide-name">Python</div>
+          <div class="slide-level" data-i18n="lv-int">Intermedio</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="68"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon" style="color:var(--green)"><i class="fas fa-table"></i></div>
+          <div class="slide-name">Apps Script</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="85"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon" style="color:var(--purple)"><i class="fas fa-database"></i></div>
+          <div class="slide-name">SQL / MySQL</div>
+          <div class="slide-level" data-i18n="lv-int">Intermedio</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="65"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="dev">
+          <div class="slide-icon" style="color:var(--orange)"><i class="fas fa-project-diagram"></i></div>
+          <div class="slide-name">Gestión de Proyectos</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="80"></div></div>
+        </div>
+        <!-- SEC -->
+        <div class="skill-slide" data-cat="sec">
+          <div class="slide-icon" style="color:var(--cyan)"><i class="fas fa-shield-alt"></i></div>
+          <div class="slide-name">Ciberseguridad</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="78"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="sec">
+          <div class="slide-icon" style="color:var(--red,#ef4444)"><i class="fas fa-bug"></i></div>
+          <div class="slide-name">Pen Testing</div>
+          <div class="slide-level" data-i18n="lv-int">Intermedio</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="62"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="sec">
+          <div class="slide-icon" style="color:#e74c3c"><i class="fas fa-fire-alt"></i></div>
+          <div class="slide-name">Fortinet</div>
+          <div class="slide-level" data-i18n="lv-cert">Certificado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="74"></div></div>
+        </div>
+        <!-- OPS -->
+        <div class="skill-slide" data-cat="ops">
+          <div class="slide-icon" style="color:#f39c12"><i class="fab fa-linux"></i></div>
+          <div class="slide-name">Linux</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="76"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="ops">
+          <div class="slide-icon" style="color:var(--blue)"><i class="fas fa-network-wired"></i></div>
+          <div class="slide-name">Redes TCP/IP</div>
+          <div class="slide-level" data-i18n="lv-good">Bueno</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="70"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="ops">
+          <div class="slide-icon" style="color:#00adef"><i class="fab fa-windows"></i></div>
+          <div class="slide-name">Windows Server</div>
+          <div class="slide-level" data-i18n="lv-int">Intermedio</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="65"></div></div>
+        </div>
+        <!-- BIZ -->
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#f97316"><i class="fas fa-chart-line"></i></div>
+          <div class="slide-name">Marketing Digital</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="80"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#a855f7"><i class="fas fa-chart-bar"></i></div>
+          <div class="slide-name">Análisis de Datos</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="82"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#10d9a0"><i class="fas fa-tachometer-alt"></i></div>
+          <div class="slide-name">Métricas & KPIs</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="84"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#06b6d4"><i class="fas fa-building"></i></div>
+          <div class="slide-name">Administración Empresarial</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="78"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#6366f1"><i class="fas fa-rocket"></i></div>
+          <div class="slide-name">Desarrollo de Empresas</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="76"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#f59e0b"><i class="fas fa-tasks"></i></div>
+          <div class="slide-name">Gestión de Proyectos TI</div>
+          <div class="slide-level" data-i18n="lv-exp">Experto</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="88"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#ec4899"><i class="fas fa-bullhorn"></i></div>
+          <div class="slide-name">Estrategia SEO/SEM</div>
+          <div class="slide-level" data-i18n="lv-int">Intermedio</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="70"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#34d399"><i class="fas fa-funnel-dollar"></i></div>
+          <div class="slide-name">Embudo de Ventas</div>
+          <div class="slide-level" data-i18n="lv-adv">Avanzado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="77"></div></div>
+        </div>
+        <div class="skill-slide" data-cat="biz">
+          <div class="slide-icon" style="color:#fb923c"><i class="fas fa-coins"></i></div>
+          <div class="slide-name">Finanzas & Contabilidad</div>
+          <div class="slide-level" data-i18n="lv-cert">Certificado</div>
+          <div class="prog-bar"><div class="prog-fill" data-w="72"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-nav">
+      <button class="c-nav-btn" id="c-prev"><i class="fas fa-chevron-left"></i></button>
+      <div class="c-dots" id="c-dots"></div>
+      <button class="c-nav-btn" id="c-next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <!-- Soft skills -->
+    <div style="margin-top:4rem">
+      <div class="sec-label" style="margin-bottom:1.5rem"><span data-i18n="soft-label">Soft Skills</span></div>
+      <div class="soft-grid">
+        <div class="soft-card reveal"><div class="soft-icon">🧭</div><div class="soft-name" data-i18n="soft1">Liderazgo</div><div class="soft-tag" data-i18n="soft1-t">Dirección Estratégica</div></div>
+        <div class="soft-card reveal delay-1"><div class="soft-icon">⚡</div><div class="soft-name" data-i18n="soft2">Proactividad</div><div class="soft-tag" data-i18n="soft2-t">Visión a Largo Plazo</div></div>
+        <div class="soft-card reveal delay-2"><div class="soft-icon">⏱️</div><div class="soft-name" data-i18n="soft3">Gestión del Tiempo</div><div class="soft-tag" data-i18n="soft3-t">Máxima Productividad</div></div>
+        <div class="soft-card reveal delay-3"><div class="soft-icon">🔄</div><div class="soft-name" data-i18n="soft4">Adaptabilidad</div><div class="soft-tag" data-i18n="soft4-t">Respuesta al Cambio</div></div>
+        <div class="soft-card reveal delay-4"><div class="soft-icon">💡</div><div class="soft-name" data-i18n="soft5">Resolución de Problemas</div><div class="soft-tag" data-i18n="soft5-t">Mente Solucionadora</div></div>
+        <div class="soft-card reveal delay-5"><div class="soft-icon">💬</div><div class="soft-name" data-i18n="soft6">Comunicación</div><div class="soft-tag" data-i18n="soft6-t">Claridad y Empatía</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== EDUCATION ===================== -->
+<section id="education">
+  <div class="sec-label"><span data-i18n="edu-label">Académico</span></div>
+  <h2 class="sec-title" data-i18n="edu-title">Formación & Certificaciones</h2>
+  <p class="sec-sub" data-i18n="edu-sub">Títulos académicos y certificaciones que respaldan mis competencias técnicas.</p>
+
+  <div class="edu-grid reveal">
+    <div class="edu-card">
+      <div class="edu-year">2026</div>
+      <div class="edu-title" data-i18n="edu1">Ingeniería de Sistemas</div>
+      <div class="edu-inst">Universidad Simón Bolívar</div>
+      <button class="edu-btn" onclick="openModal('modal-ing-sistemas')"><i class="fas fa-eye"></i> <span data-i18n="see-title">Ver Título</span></button>
+    </div>
+    <div class="edu-card" style="border-left-color:var(--cyan)">
+      <div class="edu-year" style="color:var(--cyan);background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.2)">2026</div>
+      <div class="edu-title" data-i18n="edu2">Tecnólogo en Gestión de Redes de Datos</div>
+      <div class="edu-inst">SENA</div>
+      <button class="edu-btn" onclick="openModal('modal-tec-redes')"><i class="fas fa-eye"></i> <span data-i18n="see-title">Ver Título</span></button>
+    </div>
+    <div class="edu-card" style="border-left-color:var(--green)">
+      <div class="edu-year" style="color:var(--green);background:rgba(16,217,160,0.1);border-color:rgba(16,217,160,0.2)">2022</div>
+      <div class="edu-title" data-i18n="edu3">Tecnólogo en Análisis y Desarrollo de Sistemas</div>
+      <div class="edu-inst">SENA</div>
+      <button class="edu-btn" onclick="openModal('modal-tec-analisis')"><i class="fas fa-eye"></i> <span data-i18n="see-title">Ver Título</span></button>
+    </div>
+    <div class="edu-card" style="border-left-color:var(--orange)">
+      <div class="edu-year" style="color:var(--orange);background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.2)">2023</div>
+      <div class="edu-title" data-i18n="edu4">Técnico en Contabilidad y Finanzas</div>
+      <div class="edu-inst">SENA</div>
+      <button class="edu-btn" onclick="openModal('modal-tec-finanzas')"><i class="fas fa-eye"></i> <span data-i18n="see-title">Ver Título</span></button>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem">
+    <div class="sec-label" style="margin-bottom:1.5rem"><span data-i18n="cert-label">Certificaciones Profesionales</span></div>
+    <div class="certs-grid reveal">
+      <div class="cert-card">
+        <div class="cert-icon"><i class="fas fa-shield-alt"></i></div>
+        <div><div class="cert-name">Ciberseguridad</div><div class="cert-issuer">Fortinet NSE</div></div>
+        <button class="cert-btn" onclick="openModal('modal-cert-fortinet')"><i class="fas fa-eye"></i></button>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon" style="background:rgba(6,182,212,0.1);color:var(--cyan)"><i class="fas fa-lock"></i></div>
+        <div><div class="cert-name">Seguridad Informática</div><div class="cert-issuer">Coursera</div></div>
+        <button class="cert-btn" onclick="openModal('modal-cert-coursera')"><i class="fas fa-eye"></i></button>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon" style="background:rgba(16,217,160,0.1);color:var(--green)"><i class="fas fa-database"></i></div>
+        <div><div class="cert-name">Seguridad de la Información</div><div class="cert-issuer">Udemy</div></div>
+        <button class="cert-btn" onclick="openModal('modal-cert-udemy')"><i class="fas fa-eye"></i></button>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon" style="background:rgba(239,68,68,0.1);color:#ef4444"><i class="fas fa-fire-alt"></i></div>
+        <div><div class="cert-name">Admin. de Seguridad</div><div class="cert-issuer">Fortinet</div></div>
+        <button class="cert-btn" onclick="openModal('modal-cert-fortinet1')"><i class="fas fa-eye"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects">
+  <div class="sec-label"><span data-i18n="proj-label">Portfolio</span></div>
+  <h2 class="sec-title" data-i18n="proj-title">Proyectos Destacados</h2>
+  <p class="sec-sub" data-i18n="proj-sub">Soluciones reales construidas con tecnología moderna para problemas del mundo real.</p>
+
+  <div class="proj-grid">
+    <div class="proj-card reveal">
+      <div class="proj-top">
+        <div class="proj-icon"><i class="fas fa-money-bill-wave"></i></div>
+        <i class="fas fa-arrow-up-right-from-square proj-arrow"></i>
+      </div>
+      <div class="proj-title" data-i18n="p1-title">Sistema de Nómina y Tesorería Web</div>
+      <div class="proj-desc" data-i18n="p1-desc">Plataforma robusta con interfaz intuitiva, automatización de procesos y generación de reportes detallados. Implementa validaciones avanzadas y cálculos financieros precisos.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Apps Script</span><span class="proj-tag">Google Sheets</span>
+      </div>
+      <div class="proj-links">
+        <a href="#" target="_blank" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
+      </div>
+    </div>
+
+    <div class="proj-card reveal delay-1">
+      <div class="proj-top">
+        <div class="proj-icon" style="background:rgba(16,217,160,0.1);border-color:rgba(16,217,160,0.2);color:var(--green)"><i class="fas fa-industry"></i></div>
+        <i class="fas fa-arrow-up-right-from-square proj-arrow"></i>
+      </div>
+      <div class="proj-title">BarrilTech — <span data-i18n="p2-title">Sistema de Gestión</span></div>
+      <div class="proj-desc" data-i18n="p2-desc">Plataforma completa de gestión empresarial para control de inventarios y administración de recursos con dashboard ejecutivo y métricas en tiempo real.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Apps Script</span><span class="proj-tag">Google Workspace</span>
+      </div>
+      <div class="proj-links">
+        <a href="#" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
+      </div>
+    </div>
+
+    <div class="proj-card reveal delay-2">
+      <div class="proj-top">
+        <div class="proj-icon" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.2);color:var(--purple)"><i class="fas fa-chart-pie"></i></div>
+        <i class="fas fa-arrow-up-right-from-square proj-arrow"></i>
+      </div>
+      <div class="proj-title" data-i18n="p3-title">Sistema de Gestión Financiera Personal</div>
+      <div class="proj-desc" data-i18n="p3-desc">Herramienta de control y análisis financiero con categorización automática, proyecciones y alertas inteligentes de presupuesto.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Apps Script</span><span class="proj-tag">Charts API</span>
+      </div>
+      <div class="proj-links">
+        <a href="#" target="_blank" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
+      </div>
+    </div>
+
+    <div class="proj-card reveal delay-3">
+      <div class="proj-top">
+        <div class="proj-icon" style="background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.2);color:var(--orange)"><i class="fas fa-church"></i></div>
+        <i class="fas fa-lock proj-arrow" style="opacity:0.4"></i>
+      </div>
+      <div class="proj-title" data-i18n="p4-title">Sistema La Victoria Cruzada Cristiana</div>
+      <div class="proj-desc" data-i18n="p4-desc">Plataforma a medida para administración de miembros, finanzas y actividades eclesiásticas. Solución completa hecha para organización religiosa.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Google Sheets</span><span class="proj-tag">Apps Script</span>
+      </div>
+      <div class="proj-links">
+        <a href="#" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
+      </div>
+    </div>
+
+    <div class="proj-card reveal delay-4" style="grid-column: span 1">
+      <div class="proj-top">
+        <div class="proj-icon" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#ef4444"><i class="fas fa-shield-virus"></i></div>
+        <i class="fas fa-arrow-up-right-from-square proj-arrow"></i>
+      </div>
+      <div class="proj-title" data-i18n="p5-title">Sistema de Ciberseguridad</div>
+      <div class="proj-desc" data-i18n="p5-desc">Herramientas de análisis de vulnerabilidades con escaneo automatizado, análisis de riesgos y generación de reportes ejecutivos.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">Python</span><span class="proj-tag">Nmap</span><span class="proj-tag">Bash</span><span class="proj-tag">Linux</span><span class="proj-tag">Security Tools</span>
+      </div>
+      <div class="proj-links">
+        <a href="#" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="sec-label"><span data-i18n="contact-label">Trabajemos juntos</span></div>
+  <h2 class="sec-title" data-i18n="contact-title">Contacto</h2>
+  <p class="sec-sub" data-i18n="contact-sub">¿Tienes un proyecto en mente? Estoy listo para escucharte.</p>
+
+  <div class="contact-wrapper reveal">
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-col">
+          <div class="contact-item">
+            <div class="c-icon"><i class="fas fa-envelope"></i></div>
+            <div><div class="c-label">Email</div><div class="c-val"><a href="/cdn-cgi/l/email-protection#345e5b5158445d5a515055465d5a575b5a020004745359555d581a575b59"><span class="__cf_email__" data-cfemail="f892979d948891969d9c998a91969b9796ceccc8b89f95999194d69b9795">[email&#160;protected]</span></a></div></div>
+          </div>
+          <div class="contact-item">
+            <div class="c-icon" style="background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
+            <div><div class="c-label" data-i18n="ic-contact">Contacto Directo</div><div class="c-val"><a href="https://wa.me/573133118664" target="_blank">+57 313 311 8664</a></div></div>
+          </div>
+          <div class="contact-item">
+            <div class="c-icon" style="background:linear-gradient(135deg,#64748b,#334155)"><i class="fas fa-map-marker-alt"></i></div>
+            <div><div class="c-label" data-i18n="ic-loc">Ubicación</div><div class="c-val">Cúcuta, Norte de Santander, CO</div></div>
+          </div>
+        </div>
+        <div class="social-row" style="margin-top:1.5rem">
+          <a href="https://github.com/SystemsPlay" target="_blank" class="soc-btn"><i class="fab fa-github"></i> GitHub</a>
+          <a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank" class="soc-btn"><i class="fas fa-globe"></i> KODEVA</a>
+          <a href="https://wa.me/573133118664" target="_blank" class="soc-btn" style="color:var(--green);border-color:rgba(16,217,160,0.3)"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contact-form">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f-name">Nombre o Empresa *</label>
+          <input class="form-input" type="text" name="nombre_o_empresa" placeholder="Tu nombre o empresa" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f-phone">Teléfono</label>
+            <input class="form-input" type="tel" name="telefono" placeholder="+57 300 000 0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f-country">País</label>
+            <select class="form-select form-input" name="pais">
+              <option value="CO">Colombia 🇨🇴</option>
+              <option value="MX">México 🇲🇽</option>
+              <option value="US">USA 🇺🇸</option>
+              <option value="ES">España 🇪🇸</option>
+              <option value="AR">Argentina 🇦🇷</option>
+              <option value="OTHER" data-i18n="f-other">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f-msg">Mensaje / Concepto del Proyecto *</label>
+          <textarea class="form-textarea" name="concepto" placeholder="Cuéntame sobre tu proyecto o idea..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center" id="submit-btn">
+          <i class="fas fa-paper-plane"></i> <span id="submit-text" data-i18n="f-send">Enviar Mensaje</span>
+        </button>
+        <div id="form-status" style="margin-top:0.75rem;text-align:center;font-size:0.9rem;font-weight:600;opacity:0;transition:opacity 0.3s"></div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1280px;margin:0 auto">
+    <span class="footer-logo">Joel Pineda</span>
+    <span class="footer-text" data-i18n="footer-text">© 2025 Joel Steven Pineda Rincón · Cúcuta, Colombia</span>
+    <div class="footer-kodeva"><a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank"><i class="fas fa-code"></i> KODEVA SOFT</a></div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-ing-sistemas">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title" data-i18n="edu1">Ingeniería de Sistemas</span><button class="modal-close" onclick="closeModal('modal-ing-sistemas')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/Universidad.pdf#view=fit" title="Ingeniería de Sistemas"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-tec-redes">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title" data-i18n="edu2">Tecnólogo en Gestión de Redes</span><button class="modal-close" onclick="closeModal('modal-tec-redes')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/Gestion.pdf#view=fit" title="Gestión de Redes"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-tec-analisis">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title" data-i18n="edu3">Tecnólogo ADSI</span><button class="modal-close" onclick="closeModal('modal-tec-analisis')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/adsi.pdf#view=fit" title="ADSI"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-tec-finanzas">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title" data-i18n="edu4">Técnico Contabilidad</span><button class="modal-close" onclick="closeModal('modal-tec-finanzas')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/Conta.pdf#view=fit" title="Contabilidad"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-cert-fortinet">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title">Fortinet — Ciberseguridad NSE</span><button class="modal-close" onclick="closeModal('modal-cert-fortinet')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/fcf.pdf#view=fit" title="Fortinet"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-cert-coursera">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title">Coursera — Seguridad Informática</span><button class="modal-close" onclick="closeModal('modal-cert-coursera')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/coursera.pdf#view=fit" title="Coursera"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-cert-udemy">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title">Udemy — Seguridad de la Información</span><button class="modal-close" onclick="closeModal('modal-cert-udemy')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="./Cert_Udemy.pdf#view=fit" title="Udemy"></iframe></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-cert-fortinet1">
+  <div class="modal-box">
+    <div class="modal-head"><span class="modal-title">Fortinet — Admin. de Seguridad</span><button class="modal-close" onclick="closeModal('modal-cert-fortinet1')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><iframe src="archivos/fori.pdf#view=fit" title="Fortinet Admin"></iframe></div>
+  </div>
+</div>
+
+<script>
+/* =============================================
+   TRANSLATIONS
+============================================= */
+const i18n = {
+  es: {
+    'nav-home':'Inicio','nav-exp':'Experiencia','nav-about':'Sobre mí',
+    'nav-skills':'Habilidades','nav-edu':'Formación','nav-projects':'Proyectos','nav-contact':'Contacto',
+    'status':'Disponible para trabajar','hero-eyebrow':'Ing. Sistemas · Cúcuta, Colombia',
+    'hero-title':'Desarrollador & Especialista en Ciberseguridad',
+    'hero-desc':'Estudiante de Ingeniería de Sistemas con múltiples certificaciones en desarrollo de software y ciberseguridad. Construyendo soluciones tecnológicas de alto impacto.',
+    'btn-projects':'Ver Proyectos','btn-contact':'Contáctame',
+    'stat-proj':'Proyectos','stat-certs':'Certificaciones','stat-years':'Años exp.','stat-sem':'Semestre',
+    'exp-label':'Trayectoria','exp-title':'Experiencia','exp-sub':'Proyectos reales, freelance y formación práctica que han moldeado mi perfil profesional.',
+    'exp1-title':'Desarrollador Web Full-Stack (Freelance)','present':'Presente',
+    'exp1-desc':'Diseño y desarrollo de aplicaciones web completas para clientes como organizaciones religiosas, empresas comerciales y proyectos personales. Implementación de sistemas de gestión con Google Apps Script, dashboards ejecutivos y automatización de procesos.',
+    'exp2-title':'Analista de Ciberseguridad (Prácticas Académicas)','intern':'Académico',
+    'exp2-desc':'Análisis de vulnerabilidades en sistemas empresariales mediante herramientas especializadas (Nmap, Fortinet). Elaboración de reportes ejecutivos de seguridad y aplicación de metodologías de auditoría.',
+    'exp3-title':'Administrador de Sistemas & Redes','selflearned':'Autodidacta',
+    'exp3-desc':'Configuración y administración de redes TCP/IP, sistemas operativos Linux/Windows Server. Mantenimiento de hardware, diagnóstico de fallos y optimización del rendimiento.',
+    'about-label':'Personal','about-title':'Sobre Mí',
+    'about-bio':'Soy <strong>Joel Steven Pineda Rincón</strong>, estudiante de <strong>Ingeniería de Sistemas</strong> en la Universidad Simón Bolívar (10° semestre). Me apasiona el desarrollo web, la ciberseguridad y la automatización de procesos. Soy proactivo, autodidacta y busco siempre superar las expectativas.',
+    'val1':'Integridad','val1-d':'Honestidad y ética en cada proyecto',
+    'val2':'Innovación','val2-d':'Soluciones de vanguardia',
+    'val3':'Calidad','val3-d':'Excelencia y entrega rigurosa',
+    'ic-birth':'Nacimiento','ic-loc':'Ubicación','ic-uni':'Universidad',
+    'ic-contact':'Contacto Directo','ic-interests':'Intereses','ic-interests-v':'AI, Hardware, Gaming, Deportes',
+    'skills-label':'Tech Stack','skills-title':'Habilidades Técnicas',
+    'skills-sub':'Tecnologías que manejo con confianza para construir soluciones robustas y seguras.',
+    'cat-all':'Todas','cat-dev':'Desarrollo','cat-sec':'Seguridad','cat-ops':'Sistemas','cat-biz':'Negocios',
+    'lv-exp':'Experto','lv-adv':'Avanzado','lv-int':'Intermedio','lv-good':'Bueno','lv-cert':'Certificado',
+    'soft-label':'Soft Skills',
+    'soft1':'Liderazgo','soft1-t':'Dirección Estratégica',
+    'soft2':'Proactividad','soft2-t':'Visión a Largo Plazo',
+    'soft3':'Gestión del Tiempo','soft3-t':'Máxima Productividad',
+    'soft4':'Adaptabilidad','soft4-t':'Respuesta al Cambio',
+    'soft5':'Resolución de Problemas','soft5-t':'Mente Solucionadora',
+    'soft6':'Comunicación','soft6-t':'Claridad y Empatía',
+    'edu-label':'Académico','edu-title':'Formación & Certificaciones',
+    'edu-sub':'Títulos académicos y certificaciones que respaldan mis competencias técnicas.',
+    'edu1':'Ingeniería de Sistemas','edu2':'Tecnólogo en Gestión de Redes de Datos',
+    'edu3':'Tecnólogo en Análisis y Desarrollo de Sistemas','edu4':'Técnico en Contabilidad y Finanzas',
+    'see-title':'Ver Título','cert-label':'Certificaciones Profesionales',
+    'proj-label':'Portfolio','proj-title':'Proyectos Destacados',
+    'proj-sub':'Soluciones reales construidas con tecnología moderna para problemas del mundo real.',
+    'p1-title':'Sistema de Nómina y Tesorería Web',
+    'p1-desc':'Plataforma robusta con interfaz intuitiva, automatización de procesos y generación de reportes detallados. Implementa validaciones avanzadas y cálculos financieros precisos.',
+    'p2-title':'Sistema de Gestión',
+    'p2-desc':'Plataforma completa de gestión empresarial para control de inventarios y administración de recursos con dashboard ejecutivo y métricas en tiempo real.',
+    'p3-title':'Sistema de Gestión Financiera Personal',
+    'p3-desc':'Herramienta de control y análisis financiero con categorización automática, proyecciones y alertas inteligentes de presupuesto.',
+    'p4-title':'Sistema La Victoria Cruzada Cristiana',
+    'p4-desc':'Plataforma a medida para administración de miembros, finanzas y actividades eclesiásticas.',
+    'p5-title':'Sistema de Ciberseguridad',
+    'p5-desc':'Herramientas de análisis de vulnerabilidades con escaneo automatizado, análisis de riesgos y generación de reportes ejecutivos.',
+    'code':'Código','private':'Privado',
+    'contact-label':'Trabajemos juntos','contact-title':'Contacto',
+    'contact-sub':'¿Tienes un proyecto en mente? Estoy listo para escucharte.',
+    'f-name':'Nombre o Empresa *','f-phone':'Teléfono','f-country':'País',
+    'f-msg':'Mensaje / Concepto del Proyecto *','f-send':'Enviar Mensaje','f-other':'Otro',
+    'footer-text':'© 2025 Joel Steven Pineda Rincón · Cúcuta, Colombia',
+  },
+  en: {
+    'nav-home':'Home','nav-exp':'Experience','nav-about':'About',
+    'nav-skills':'Skills','nav-edu':'Education','nav-projects':'Projects','nav-contact':'Contact',
+    'status':'Available for work','hero-eyebrow':'Systems Engineer · Cúcuta, Colombia',
+    'hero-title':'Developer & Cybersecurity Specialist',
+    'hero-desc':'Systems Engineering student with multiple certifications in software development and cybersecurity. Building high-impact technological solutions.',
+    'btn-projects':'View Projects','btn-contact':'Contact Me',
+    'stat-proj':'Projects','stat-certs':'Certifications','stat-years':'Yrs experience','stat-sem':'Semester',
+    'exp-label':'Career','exp-title':'Experience','exp-sub':'Real projects, freelance work, and hands-on training that have shaped my professional profile.',
+    'exp1-title':'Full-Stack Web Developer (Freelance)','present':'Present',
+    'exp1-desc':'Design and development of complete web applications for clients including religious organizations, businesses and personal projects. Implementation of management systems with Google Apps Script, executive dashboards and process automation.',
+    'exp2-title':'Cybersecurity Analyst (Academic Internship)','intern':'Academic',
+    'exp2-desc':'Vulnerability analysis in enterprise systems using specialized tools (Nmap, Fortinet). Creation of executive security reports and application of audit methodologies.',
+    'exp3-title':'Systems & Network Administrator','selflearned':'Self-taught',
+    'exp3-desc':'Configuration and administration of TCP/IP networks, Linux/Windows Server operating systems. Hardware maintenance, fault diagnostics and performance optimization.',
+    'about-label':'Personal','about-title':'About Me',
+    'about-bio':'I\'m <strong>Joel Steven Pineda Rincón</strong>, a <strong>Systems Engineering</strong> student at Universidad Simón Bolívar (10th semester). I\'m passionate about web development, cybersecurity, and process automation. Proactive, self-taught, and always pushing to exceed expectations.',
+    'val1':'Integrity','val1-d':'Honesty and ethics in every project',
+    'val2':'Innovation','val2-d':'Cutting-edge solutions',
+    'val3':'Quality','val3-d':'Excellence and rigorous delivery',
+    'ic-birth':'Birth Date','ic-loc':'Location','ic-uni':'University',
+    'ic-contact':'Direct Contact','ic-interests':'Interests','ic-interests-v':'AI, Hardware, Gaming, Sports',
+    'skills-label':'Tech Stack','skills-title':'Technical Skills',
+    'skills-sub':'Technologies I confidently use to build robust and secure solutions.',
+    'cat-all':'All','cat-dev':'Development','cat-sec':'Security','cat-ops':'Systems','cat-biz':'Business',
+    'lv-exp':'Expert','lv-adv':'Advanced','lv-int':'Intermediate','lv-good':'Good','lv-cert':'Certified',
+    'soft-label':'Soft Skills',
+    'soft1':'Leadership','soft1-t':'Strategic Direction',
+    'soft2':'Proactivity','soft2-t':'Long-term Vision',
+    'soft3':'Time Management','soft3-t':'Maximum Productivity',
+    'soft4':'Adaptability','soft4-t':'Response to Change',
+    'soft5':'Problem Solving','soft5-t':'Solution-oriented Mind',
+    'soft6':'Communication','soft6-t':'Clarity and Empathy',
+    'edu-label':'Academic','edu-title':'Education & Certifications',
+    'edu-sub':'Academic degrees and certifications that back my technical competencies.',
+    'edu1':'Systems Engineering','edu2':'Data Network Management Technologist',
+    'edu3':'Analysis and Systems Development Technologist','edu4':'Accounting and Finance Technician',
+    'see-title':'View Certificate','cert-label':'Professional Certifications',
+    'proj-label':'Portfolio','proj-title':'Featured Projects',
+    'proj-sub':'Real solutions built with modern technology for real-world problems.',
+    'p1-title':'Payroll & Treasury Web System',
+    'p1-desc':'Robust platform with intuitive UI, process automation and detailed report generation. Advanced validations and precise financial calculations.',
+    'p2-title':'Management System',
+    'p2-desc':'Complete business management platform for inventory control and resource administration with executive dashboard and real-time metrics.',
+    'p3-title':'Personal Financial Management System',
+    'p3-desc':'Financial control and analysis tool with automatic categorization, projections and intelligent budget alerts.',
+    'p4-title':'La Victoria Cruzada Cristiana System',
+    'p4-desc':'Custom platform for member administration, finances and ecclesiastical activities.',
+    'p5-title':'Cybersecurity System',
+    'p5-desc':'Vulnerability analysis tools with automated scanning, risk analysis and executive report generation.',
+    'code':'Code','private':'Private',
+    'contact-label':'Let\'s work together','contact-title':'Contact',
+    'contact-sub':'Have a project in mind? I\'m ready to listen.',
+    'f-name':'Name or Company *','f-phone':'Phone','f-country':'Country',
+    'f-msg':'Message / Project Concept *','f-send':'Send Message','f-other':'Other',
+    'footer-text':'© 2025 Joel Steven Pineda Rincón · Cúcuta, Colombia',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'es';
+let currentTheme = localStorage.getItem('theme') || 'dark';
+
+function applyLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('lang-btn').textContent = lang === 'es' ? 'EN' : 'ES';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+  });
+}
+
+function applyTheme(theme) {
+  currentTheme = theme;
+  localStorage.setItem('theme', theme);
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-btn');
+  btn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+document.getElementById('lang-btn').addEventListener('click', () => applyLang(currentLang === 'es' ? 'en' : 'es'));
+document.getElementById('theme-btn').addEventListener('click', () => applyTheme(currentTheme === 'dark' ? 'light' : 'dark'));
+
+applyLang(currentLang);
+applyTheme(currentTheme);
+
+/* =============================================
+   HAMBURGER
+============================================= */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobile-nav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+});
+mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hamburger.classList.remove('open');
+  mobileNav.classList.remove('open');
+}));
+
+/* =============================================
+   CAROUSEL
+============================================= */
+let carIdx = 0;
+const track = document.getElementById('carousel-track');
+const allSlides = Array.from(track.children);
+let visibleSlides = getVisibleCount();
+let filteredSlides = [...allSlides];
+let autoTimer;
+
+function getVisibleCount() {
+  return window.innerWidth < 480 ? 1 : window.innerWidth < 768 ? 2 : window.innerWidth < 1024 ? 3 : 4;
+}
+
+function buildDots() {
+  const dots = document.getElementById('c-dots');
+  const pages = Math.max(1, Math.ceil(filteredSlides.length / visibleSlides));
+  dots.innerHTML = '';
+  for (let i = 0; i < pages; i++) {
+    const d = document.createElement('div');
+    d.className = 'c-dot' + (i === carIdx ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dots.appendChild(d);
+  }
+}
+
+function updateDots() {
+  document.querySelectorAll('.c-dot').forEach((d, i) => d.classList.toggle('active', i === carIdx));
+}
+
+function filterCat(cat) {
+  filteredSlides = cat === 'all' ? [...allSlides] : allSlides.filter(s => s.dataset.cat === cat);
+  allSlides.forEach(s => s.style.display = filteredSlides.includes(s) ? '' : 'none');
+  carIdx = 0;
+  track.style.transform = 'translateX(0)';
+  buildDots();
+  goTo(0);
+}
+
+function goTo(idx) {
+  const pages = Math.max(1, Math.ceil(filteredSlides.length / visibleSlides));
+  carIdx = Math.max(0, Math.min(idx, pages - 1));
+  const visIdx = carIdx * visibleSlides;
+  const targetSlide = filteredSlides[visIdx];
+  if (targetSlide) {
+    const trackLeft = track.getBoundingClientRect().left;
+    const slideLeft = targetSlide.getBoundingClientRect().left;
+    const currentOffset = parseFloat(track.style.transform.replace(/[^-\d.]/g,'')) || 0;
+    const newOffset = currentOffset - (slideLeft - trackLeft);
+    track.style.transform = `translateX(${newOffset}px)`;
+  }
+  updateDots();
+}
+
+function next() { goTo(carIdx + 1); }
+function prev() { goTo(carIdx - 1); }
+
+document.getElementById('c-next').addEventListener('click', next);
+document.getElementById('c-prev').addEventListener('click', prev);
+
+document.querySelectorAll('.skill-cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.skill-cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterCat(btn.dataset.cat);
+  });
+});
+
+window.addEventListener('resize', () => {
+  visibleSlides = getVisibleCount();
+  buildDots();
+  goTo(0);
+});
+
+setTimeout(() => {
+  visibleSlides = getVisibleCount();
+  buildDots();
+  document.querySelectorAll('.prog-fill').forEach(fill => {
+    setTimeout(() => { fill.style.width = fill.dataset.w + '%'; }, 300);
+  });
+  autoTimer = setInterval(next, 4000);
+}, 200);
+
+track.addEventListener('mouseenter', () => clearInterval(autoTimer));
+track.addEventListener('mouseleave', () => { clearInterval(autoTimer); autoTimer = setInterval(next, 4000); });
+
+/* =============================================
+   SCROLL ANIMATIONS
+============================================= */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if (entry.target.closest('#skills')) {
+        entry.target.querySelectorAll('.prog-fill').forEach(fill => {
+          fill.style.width = fill.dataset.w + '%';
+        });
+      }
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+/* =============================================
+   NAV ACTIVE + SCROLL
+============================================= */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('[data-nav]');
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.nav === entry.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -50% 0px' });
+
+sections.forEach(s => navObserver.observe(s));
+
+/* =============================================
+   MODAL
+============================================= */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+});
+
+/* =============================================
+   CONTACT FORM (Telegram)
+============================================= */
+const TELEGRAM_TOKEN = '7905455855:AAEvfJkGM4c4MvODarJ8QhPn0dWTt-uaHvM';
+const CHAT_ID = '1589088082';
+
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const statusEl = document.getElementById('form-status');
+  const submitText = document.getElementById('submit-text');
+  const data = new FormData(this);
+
+  btn.disabled = true;
+  submitText.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+
+  const msg = `<b>✨ NUEVO MENSAJE DE PORTAFOLIO ✨</b>\n\n<b>👤 Nombre:</b> ${data.get('nombre_o_empresa')}\n<b>📞 Teléfono:</b> ${data.get('telefono') || 'N/A'}\n<b>🌍 País:</b> ${data.get('pais')}\n\n<b>💡 Mensaje:</b>\n${data.get('concepto')}`;
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
+    const json = await res.json();
+    if (json.ok) {
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = currentLang === 'es' ? '✅ ¡Mensaje enviado! Te contactaré pronto.' : '✅ Message sent! I\'ll contact you soon.';
+      statusEl.style.opacity = '1';
+      this.reset();
+    } else throw new Error();
+  } catch {
+    statusEl.style.color = '#ef4444';
+    statusEl.textContent = currentLang === 'es' ? '❌ Error al enviar. Intenta más tarde.' : '❌ Error sending. Try again later.';
+    statusEl.style.opacity = '1';
+  } finally {
+    btn.disabled = false;
+    submitText.textContent = i18n[currentLang]['f-send'];
+    setTimeout(() => statusEl.style.opacity = '0', 5000);
+  }
+});
+
+/* =============================================
+   CURSOR GLOW EFFECT
+============================================= */
+const glow = document.createElement('div');
+glow.style.cssText = 'position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.07) 0%,transparent 70%);pointer-events:none;z-index:-1;transform:translate(-50%,-50%);transition:opacity 0.3s';
+document.body.appendChild(glow);
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+/* =============================================
+   AUTO-ANIMATE PROGRESS BARS ON LOAD
+============================================= */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.prog-fill').forEach(fill => {
+    fill.style.width = fill.dataset.w + '%';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
@@ -302,7 +303,7 @@ section{
 }
 .badge-float.b1{bottom:-15px;left:-40px;color:var(--cyan)}
 .badge-float.b2{top:-15px;right:-40px;color:var(--green)}
-.badge-float.b3{top:-15px;right:-40px;color:var(--blue)}
+.badge-float.b3{bottom:40px;right:-50px;color:var(--blue)}
 .badge-float i{font-size:1rem}
 
 /* =============================================
@@ -712,6 +713,137 @@ footer{
   .carousel-track{gap:0.75rem}
   .skill-slide{min-width:180px}
 }
+
+/* =============================================
+   KODEVASOFT LABEL TAG ON PHOTO
+============================================= */
+.profile-card{position:relative}
+.kodeva-label-tag{
+  position:absolute;
+  bottom:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  white-space:nowrap;
+}
+.kodeva-tag-link{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  padding:0.5rem 1.1rem;
+  border-radius:100px;
+  background:linear-gradient(135deg,rgba(6,182,212,0.18),rgba(99,102,241,0.18));
+  border:1.5px solid rgba(6,182,212,0.5);
+  backdrop-filter:blur(12px);
+  color:var(--cyan);
+  font-family:'Syne',sans-serif;
+  font-size:0.8rem;
+  font-weight:700;
+  letter-spacing:0.08em;
+  box-shadow:0 4px 20px rgba(6,182,212,0.25),0 0 0 1px rgba(6,182,212,0.1);
+  transition:all 0.25s;
+}
+.kodeva-tag-link:hover{
+  background:linear-gradient(135deg,rgba(6,182,212,0.28),rgba(99,102,241,0.28));
+  box-shadow:0 6px 30px rgba(6,182,212,0.4);
+  transform:translateY(-2px);
+}
+.kodeva-tag-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);
+  animation:blink 2s ease infinite;
+  flex-shrink:0;
+}
+
+/* =============================================
+   FLOATING ACTION BUTTONS
+============================================= */
+.fab-group{
+  position:fixed;
+  bottom:2rem;
+  right:1.5rem;
+  z-index:9000;
+  display:flex;
+  flex-direction:column;
+  gap:0.75rem;
+  align-items:flex-end;
+}
+.fab-btn{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.7rem 1.1rem;
+  border-radius:100px;
+  font-size:0.85rem;font-weight:700;
+  font-family:'Syne',sans-serif;
+  box-shadow:0 6px 24px rgba(0,0,0,0.35);
+  transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+  white-space:nowrap;
+  cursor:pointer;
+  text-decoration:none;
+  border:none;
+}
+.fab-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 32px rgba(0,0,0,0.45)}
+.fab-btn i{font-size:1.05rem;flex-shrink:0}
+
+.fab-wa{
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:#fff;
+}
+.fab-wa:hover{box-shadow:0 10px 32px rgba(37,211,102,0.45)}
+
+.fab-kodeva{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  color:#fff;
+}
+.fab-kodeva:hover{box-shadow:0 10px 32px rgba(6,182,212,0.45)}
+
+/* Labels hidden on small screens, show icon only */
+.fab-label{display:inline}
+
+/* Kodeva project card hover */
+.kodeva-proj-card:hover{
+  border-color:rgba(6,182,212,0.6) !important;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 40px rgba(6,182,212,0.2) !important;
+}
+
+/* =============================================
+   ENHANCED RESPONSIVENESS
+============================================= */
+@media(max-width:1200px){
+  .proj-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:3rem}
+  .hero-text{order:1}
+  .profile-card{order:0;width:100%;display:flex;flex-direction:column;align-items:center}
+  .profile-frame{width:200px;height:245px}
+  .hero-eyebrow{justify-content:center}
+  .hero-desc{margin:0 auto 2.5rem}
+  .hero-btns{justify-content:center}
+  .hero-stats{justify-content:center}
+  .status-pill{margin:0 auto 2rem}
+  .kodeva-label-tag{bottom:-14px}
+}
+@media(max-width:600px){
+  .fab-label{display:none}
+  .fab-btn{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
+  .fab-btn i{font-size:1.2rem}
+  .fab-group{bottom:1.25rem;right:1rem;gap:0.6rem}
+  .contact-wrapper{padding:1.5rem 1rem}
+  .hero-name{font-size:clamp(2.2rem,8vw,3.5rem);letter-spacing:-1px}
+  .proj-grid{grid-template-columns:1fr}
+  .edu-grid{grid-template-columns:1fr}
+  .certs-grid{grid-template-columns:1fr}
+  .values-row{grid-template-columns:1fr}
+  .badge-float.b1{left:-10px;bottom:-20px;font-size:0.72rem;padding:0.45rem 0.7rem}
+  .badge-float.b2,.badge-float.b3{right:-10px;top:-20px;font-size:0.72rem;padding:0.45rem 0.7rem}
+}
+@media(max-width:400px){
+  .hero-stats{gap:0.75rem}
+  .stat-num{font-size:1.4rem}
+  section{padding:3rem 1rem}
+  .sec-title{font-size:1.7rem}
+  nav{padding:0 1rem}
+  .logo{font-size:1.1rem}
+  .profile-frame{width:170px;height:210px}
+}
 </style>
 </head>
 <body>
@@ -736,7 +868,7 @@ footer{
       <li><a href="#education" data-nav="education"><span data-i18n="nav-edu">Formación</span></a></li>
       <li><a href="#projects" data-nav="projects"><span data-i18n="nav-projects">Proyectos</span></a></li>
       <li><a href="#contact" data-nav="contact"><span data-i18n="nav-contact">Contacto</span></a></li>
-      <li><a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank" style="color:var(--cyan)">KODEVA <i class="fas fa-external-link-alt" style="font-size:0.7em"></i></a></li>
+      <li><a href="https://kodevasoft-space.web.app/" target="_blank" style="color:var(--cyan)">KODEVASOFT <i class="fas fa-external-link-alt" style="font-size:0.7em"></i></a></li>
     </ul>
     <div class="nav-controls">
       <button class="ctrl-btn lang-btn" id="lang-btn" title="Toggle language">ES</button>
@@ -764,13 +896,13 @@ footer{
   <div class="hero-grid">
     <div class="hero-text">
       <div class="status-pill"><div class="status-dot"></div><span data-i18n="status">Disponible para trabajar</span></div>
-      <div class="hero-eyebrow" data-i18n="hero-eyebrow">Ing. Sistemas · Cúcuta, Colombia</div>
+      <div class="hero-eyebrow" data-i18n="hero-eyebrow">Ing. Sistemas · Colombia</div>
       <h1 class="hero-name">
         Joel <span class="accent">Pineda</span><br>Rincón
       </h1>
       <div class="hero-title"><span data-i18n="hero-title">Developer & Cybersecurity Specialist</span></div>
       <p class="hero-desc" data-i18n="hero-desc">
-        Estudiante de Ingeniería de Sistemas con múltiples certificaciones en desarrollo de software y ciberseguridad. Construyendo soluciones tecnológicas de alto impacto.
+        Ingeniero de Sistemas con múltiples certificaciones en desarrollo de software y ciberseguridad. Construyendo soluciones tecnológicas de alto impacto.
       </p>
       <div class="hero-btns">
         <a href="#projects" class="btn-primary"><i class="fas fa-code"></i><span data-i18n="btn-projects">Ver Proyectos</span></a>
@@ -790,20 +922,29 @@ footer{
           <span class="stat-label" data-i18n="stat-years">Años experiencia</span>
         </div>
         <div class="stat-item reveal delay-4">
-          <span class="stat-num">10°</span>
-          <span class="stat-label" data-i18n="stat-sem">Semestre</span>
+          <span class="stat-num">✓</span>
+          <span class="stat-label" data-i18n="stat-sem">Graduado</span>
         </div>
       </div>
     </div>
     <div class="profile-card">
       <div class="profile-frame">
         <div class="profile-frame-inner">
-          <img src="archivos/foto.jpg" alt="Joel Pineda" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=\'fas fa-user\' style=\'font-size:5rem;color:var(--blue)\'></i>'">
+          <img src="archivos/foto.jpg" alt="Joel Pineda Rincón — Ingeniero de Sistemas" loading="eager" decoding="async" onerror="this.style.display='none';this.parentNode.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;width:100%;height:100%;\'><i class=\'fas fa-user-circle\' style=\'font-size:6rem;color:var(--blue);opacity:0.8\'></i><span style=\'font-size:0.75rem;color:var(--text3);font-family:DM Mono,monospace\'>Joel Pineda</span></div>'">
         </div>
+      </div>
+      <!-- KODEVASOFT startup label -->
+      <div class="kodeva-label-tag">
+        <a href="https://kodevasoft-space.web.app/" target="_blank" class="kodeva-tag-link">
+          <span class="kodeva-tag-dot"></span>
+          <i class="fas fa-rocket" style="font-size:0.75rem"></i>
+          <span>KODEVASOFT</span>
+          <i class="fas fa-external-link-alt" style="font-size:0.6rem;opacity:0.7"></i>
+        </a>
       </div>
       <div class="badge-float b1 reveal delay-2"><i class="fas fa-shield-alt" style="color:var(--cyan)"></i> Cybersecurity</div>
       <div class="badge-float b2 reveal delay-3"><i class="fas fa-code" style="color:var(--green)"></i> Full Stack</div>
-            <div class="badge-float b3 reveal delay-4"><i class="fas fa-code" style="color:var(--green)"></i>Lider TI</div>
+      <div class="badge-float b3 reveal delay-4"><i class="fas fa-microchip" style="color:var(--blue)"></i> Líder TI</div>
     </div>
   </div>
 </section>
@@ -895,7 +1036,7 @@ footer{
   <div class="about-grid">
     <div class="reveal-left">
       <p class="about-bio" data-i18n="about-bio">
-        Soy <strong>Joel Steven Pineda Rincón</strong>, estudiante de <strong>Ingeniería de Sistemas</strong> en la Universidad Simón Bolívar (10° semestre), con una visión clara: crear tecnología que resuelva problemas reales. Me apasiona el mundo del desarrollo web, la ciberseguridad y la automatización de procesos. Soy proactivo, autodidacta y busco siempre superar las expectativas.
+        Soy <strong>Joel Steven Pineda Rincón</strong>, <strong>Ingeniero de Sistemas</strong> graduado de la Universidad Simón Bolívar, con una visión clara: crear tecnología que resuelva problemas reales. Me apasiona el mundo del desarrollo web, la ciberseguridad y la automatización de procesos. Soy proactivo, autodidacta y busco siempre superar las expectativas.
       </p>
       <div class="values-row">
         <div class="value-card reveal delay-1">
@@ -922,19 +1063,19 @@ footer{
       </div>
       <div class="info-chip delay-2">
         <div class="chip-icon" style="background:var(--grad3)"><i class="fas fa-map-marker-alt"></i></div>
-        <div><div class="chip-label" data-i18n="ic-loc">Ubicación</div><div class="chip-value">Cúcuta, Norte de Santander</div></div>
+        <div><div class="chip-label" data-i18n="ic-loc">Ubicación</div><div class="chip-value">Colombia</div></div>
       </div>
       <div class="info-chip delay-3">
         <div class="chip-icon" style="background:var(--grad2)"><i class="fas fa-university"></i></div>
-        <div><div class="chip-label" data-i18n="ic-uni">Universidad</div><div class="chip-value">Simón Bolívar · 10° Semestre</div></div>
+        <div><div class="chip-label" data-i18n="ic-uni">Universidad</div><div class="chip-value">Simón Bolívar · Ingeniero de Sistemas</div></div>
       </div>
       <div class="info-chip delay-4">
         <div class="chip-icon" style="background:linear-gradient(135deg,#10d9a0,#06b6d4)"><i class="fas fa-envelope"></i></div>
-        <div><div class="chip-label">Email</div><div class="chip-value"><a href="/cdn-cgi/l/email-protection#ec868389809c858289888d9e85828f8382dad8dcac8b818d8580c28f8381"><span class="__cf_email__" data-cfemail="e882878d849881868d8c899a81868b8786dedcd8a88f85898184c68b8785">[email&#160;protected]</span></a></div></div>
+        <div><div class="chip-label">Email</div><div class="chip-value"><a href="mailto:kodevasoft@gmail.com">kodevasoft@gmail.com</a></div></div>
       </div>
       <div class="info-chip delay-5">
         <div class="chip-icon" style="background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
-        <div><div class="chip-label" data-i18n="ic-contact">Contacto Directo</div><div class="chip-value"><a href="https://wa.me/573133118664" target="_blank">+57 313 311 8664</a></div></div>
+        <div><div class="chip-label" data-i18n="ic-contact">Contacto Directo</div><div class="chip-value"><a href="https://wa.me/573174485239" target="_blank">+57 317 448 5239</a></div></div>
       </div>
       <div class="info-chip">
         <div class="chip-icon" style="background:linear-gradient(135deg,#f97316,#ef4444)"><i class="fas fa-microchip"></i></div>
@@ -1262,6 +1403,29 @@ footer{
         <a href="#" class="plink"><i class="fas fa-lock"></i> <span data-i18n="private">Privado</span></a>
       </div>
     </div>
+
+    <!-- KODEVASOFT CARD -->
+    <div class="proj-card reveal delay-5 kodeva-proj-card" style="border-color:rgba(6,182,212,0.35);background:linear-gradient(135deg,rgba(6,182,212,0.06),rgba(99,102,241,0.08))">
+      <div class="proj-top">
+        <div class="proj-icon" style="background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(99,102,241,0.2));border-color:rgba(6,182,212,0.4);color:var(--cyan)"><i class="fas fa-rocket"></i></div>
+        <a href="https://kodevasoft-space.web.app/" target="_blank"><i class="fas fa-arrow-up-right-from-square proj-arrow" style="opacity:0.8;color:var(--cyan)"></i></a>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem">
+        <div class="proj-title" style="margin-bottom:0">KODEVASOFT</div>
+        <span style="font-size:0.68rem;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff;padding:0.2rem 0.55rem;border-radius:100px;font-weight:700;letter-spacing:0.05em">STARTUP</span>
+      </div>
+      <div class="proj-desc">Mi startup de tecnología — plataforma SaaS con soluciones innovadoras para empresas y emprendedores. Automatización inteligente, sistemas de gestión y herramientas digitales de alto impacto.</div>
+      <div class="proj-tags">
+        <span class="proj-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.25)">SaaS</span>
+        <span class="proj-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.25)">Firebase</span>
+        <span class="proj-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.25)">Web App</span>
+        <span class="proj-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.25)">Startup</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://kodevasoft-space.web.app/" target="_blank" class="plink plink-demo" style="background:linear-gradient(135deg,var(--cyan),var(--blue))"><i class="fas fa-globe"></i> Ver Startup</a>
+        <a href="https://kodevasoft-space.web.app/saas-catalog.html" target="_blank" class="plink"><i class="fas fa-th-large"></i> Catálogo SaaS</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1279,21 +1443,21 @@ footer{
         <div class="contact-info-col">
           <div class="contact-item">
             <div class="c-icon"><i class="fas fa-envelope"></i></div>
-            <div><div class="c-label">Email</div><div class="c-val"><a href="/cdn-cgi/l/email-protection#345e5b5158445d5a515055465d5a575b5a020004745359555d581a575b59"><span class="__cf_email__" data-cfemail="f892979d948891969d9c998a91969b9796ceccc8b89f95999194d69b9795">[email&#160;protected]</span></a></div></div>
+            <div><div class="c-label">Email</div><div class="c-val"><a href="mailto:kodevasoft@gmail.com">kodevasoft@gmail.com</a></div></div>
           </div>
           <div class="contact-item">
             <div class="c-icon" style="background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
-            <div><div class="c-label" data-i18n="ic-contact">Contacto Directo</div><div class="c-val"><a href="https://wa.me/573133118664" target="_blank">+57 313 311 8664</a></div></div>
+            <div><div class="c-label" data-i18n="ic-contact">Contacto Directo</div><div class="c-val"><a href="https://wa.me/573174485239" target="_blank">+57 317 448 5239</a></div></div>
           </div>
           <div class="contact-item">
             <div class="c-icon" style="background:linear-gradient(135deg,#64748b,#334155)"><i class="fas fa-map-marker-alt"></i></div>
-            <div><div class="c-label" data-i18n="ic-loc">Ubicación</div><div class="c-val">Cúcuta, Norte de Santander, CO</div></div>
+            <div><div class="c-label" data-i18n="ic-loc">Ubicación</div><div class="c-val">Colombia</div></div>
           </div>
         </div>
         <div class="social-row" style="margin-top:1.5rem">
           <a href="https://github.com/SystemsPlay" target="_blank" class="soc-btn"><i class="fab fa-github"></i> GitHub</a>
-          <a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank" class="soc-btn"><i class="fas fa-globe"></i> KODEVA</a>
-          <a href="https://wa.me/573133118664" target="_blank" class="soc-btn" style="color:var(--green);border-color:rgba(16,217,160,0.3)"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="https://kodevasoft-space.web.app/" target="_blank" class="soc-btn"><i class="fas fa-globe"></i> KODEVASOFT</a>
+          <a href="https://wa.me/573174485239" target="_blank" class="soc-btn" style="color:var(--green);border-color:rgba(16,217,160,0.3)"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         </div>
       </div>
 
@@ -1337,8 +1501,8 @@ footer{
 <footer>
   <div class="footer-inner" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1280px;margin:0 auto">
     <span class="footer-logo">Joel Pineda</span>
-    <span class="footer-text" data-i18n="footer-text">© 2025 Joel Steven Pineda Rincón · Cúcuta, Colombia</span>
-    <div class="footer-kodeva"><a href="https://evidencias640-arch.github.io/KODEVA_SOFT/" target="_blank"><i class="fas fa-code"></i> KODEVA SOFT</a></div>
+    <span class="footer-text" data-i18n="footer-text">© 2025 Joel Steven Pineda Rincón · Colombia</span>
+    <div class="footer-kodeva"><a href="https://kodevasoft-space.web.app/" target="_blank"><i class="fas fa-code"></i> KODEVASOFT</a></div>
   </div>
 </footer>
 
@@ -1390,6 +1554,18 @@ footer{
     <div class="modal-head"><span class="modal-title">Fortinet — Admin. de Seguridad</span><button class="modal-close" onclick="closeModal('modal-cert-fortinet1')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body"><iframe src="archivos/fori.pdf#view=fit" title="Fortinet Admin"></iframe></div>
   </div>
+</div>
+
+<!-- FLOATING ACTION BUTTONS -->
+<div class="fab-group">
+  <a href="https://kodevasoft-space.web.app/" target="_blank" class="fab-btn fab-kodeva" title="Visitar KODEVASOFT">
+    <i class="fas fa-rocket"></i>
+    <span class="fab-label">KODEVASOFT</span>
+  </a>
+  <a href="https://wa.me/573174485239?text=Hola%20Joel%2C%20vi%20tu%20portafolio%20y%20me%20interesa%20contactarte." target="_blank" class="fab-btn fab-wa" title="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="fab-label">WhatsApp</span>
+  </a>
 </div>
 
 <script>
